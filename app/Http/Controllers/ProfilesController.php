@@ -32,7 +32,15 @@ class ProfilesController extends Controller
             'image' => 'image',
         ]);
 
-        auth()->user()->profile->update($data);
+        if (request('image')) {
+            $imagePath = request('image')->store('profile', 'public');
+
+        }
+
+        auth()->user()->profile->update(array_merge(
+            $data,
+            ['image' => $imagePath]
+        ));
         return redirect('/profile/' . $user->id);
     }
 }
